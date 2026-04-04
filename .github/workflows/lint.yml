@@ -28,11 +28,11 @@ jobs:
       matrix: ${{ steps.scan.outputs.matrix }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       - name: Discover modules
         id: scan
-        uses: mirceanton/action-folder-matrix@v3.0.0
+        uses: mirceanton/action-folder-matrix@8e502fabcdf901e955b4e607d91c661bd794734e # v3.0.0
         with:
           path: "./modules"
 
@@ -79,7 +79,7 @@ jobs:
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       - name: Check terraform-docs
-        uses: terraform-docs/gh-actions@v1.4.1
+        uses: terraform-docs/gh-actions@6de6da0cefcc6b4b7a5cbea4d79d97060733093c # v1.4.1
         with:
           find-dir: modules/
           output-file: README.md

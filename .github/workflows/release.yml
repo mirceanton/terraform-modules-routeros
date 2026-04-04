@@ -14,11 +14,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: 0
 
       - name: Generate Release
-        uses: mirceanton/action-semver-release@v3.0.0
+        uses: mirceanton/action-semver-release@85c0b525121a22d10c555688ed296e359d39f81f # v3.0.0
         with:
           github-token: ${{ github.token }}
