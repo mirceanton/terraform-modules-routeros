@@ -104,7 +104,7 @@ Use gaps between order values (e.g., 100, 200, 300) to leave room for inserting 
 
 | Name | Version |
 |------|---------|
-| <a name="provider_routeros"></a> [routeros](#provider\_routeros) | 1.99.1 |
+| <a name="provider_routeros"></a> [routeros](#provider\_routeros) | >= 1.99.1 |
 
 ## Resources
 
