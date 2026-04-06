@@ -1,3 +1,29 @@
+# --- Address Lists -------------------------------------------------------------
+
+variable "address_lists" {
+  description = <<-EOT
+    Map of address lists to create with their member addresses.
+    Each key becomes the address list name on the router.
+
+    Example:
+    {
+      wireguard-clients = {
+        comment   = "WireGuard client IPs"
+        addresses = ["10.10.0.2", "10.10.0.3"]
+      }
+      trusted-hosts = {
+        comment   = "Trusted management hosts"
+        addresses = ["192.168.1.10/32"]
+      }
+    }
+  EOT
+  type = map(object({
+    comment   = optional(string, "")
+    addresses = list(string)
+  }))
+  default = {}
+}
+
 # --- Interface Lists -----------------------------------------------------------
 
 variable "interface_lists" {
@@ -60,6 +86,8 @@ variable "nat_rules" {
     connection_rate    = optional(string)
     src_address        = optional(string)
     dst_address        = optional(string)
+    src_address_list   = optional(string)
+    dst_address_list   = optional(string)
     src_port           = optional(string)
     dst_port           = optional(string)
     protocol           = optional(string)
@@ -123,6 +151,8 @@ variable "filter_rules" {
     connection_state   = optional(string)
     src_address        = optional(string)
     dst_address        = optional(string)
+    src_address_list   = optional(string)
+    dst_address_list   = optional(string)
     src_port           = optional(string)
     dst_port           = optional(string)
     protocol           = optional(string)

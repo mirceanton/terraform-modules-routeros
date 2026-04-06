@@ -39,12 +39,14 @@ resource "routeros_ip_firewall_nat" "this" {
   src_port           = each.value.src_port
   src_address        = each.value.src_address
   dst_address        = each.value.dst_address
+  src_address_list   = each.value.src_address_list
+  dst_address_list   = each.value.dst_address_list
   to_addresses       = each.value.to_addresses
   to_ports           = each.value.to_ports
   log                = each.value.log
   log_prefix         = each.value.log_prefix
 
-  depends_on = [routeros_interface_list.this]
+  depends_on = [routeros_interface_list.this, routeros_ip_firewall_addr_list.this]
 
   lifecycle {
     create_before_destroy = true

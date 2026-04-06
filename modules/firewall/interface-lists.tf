@@ -11,7 +11,7 @@ resource "routeros_interface_list" "this" {
 }
 
 # --- Interface List Members ---------------------------------------------------
-# Flattens the nested interface_lists variable into a flat map keyed by
+# Flattens the nested interface_lists variable into a map keyed by
 # "list_name/interface_name" so that each membership can be managed
 # independently via for_each.
 

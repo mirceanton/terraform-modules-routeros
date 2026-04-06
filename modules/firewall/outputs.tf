@@ -1,3 +1,15 @@
+# --- Address List Outputs ------------------------------------------------------
+
+output "address_list_names" {
+  description = "Distinct address list names created by this module."
+  value       = distinct([for k, v in routeros_ip_firewall_addr_list.this : v.list])
+}
+
+output "address_list_ids" {
+  description = "Map of address list entry keys (list/address) to their RouterOS resource IDs."
+  value       = { for k, v in routeros_ip_firewall_addr_list.this : k => v.id }
+}
+
 # --- Interface List Outputs ----------------------------------------------------
 
 output "interface_list_names" {
