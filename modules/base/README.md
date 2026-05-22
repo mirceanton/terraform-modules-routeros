@@ -120,7 +120,7 @@ module "mikrotik" {
 | <a name="input_ntp_servers"></a> [ntp\_servers](#input\_ntp\_servers) | List of NTP server addresses for time synchronization. | `list(string)` | <pre>[<br/>  "time.cloudflare.com"<br/>]</pre> | no |
 | <a name="input_timezone"></a> [timezone](#input\_timezone) | The timezone to set on the device (e.g., 'UTC', 'America/New\_York', 'Europe/London'). | `string` | `"UTC"` | no |
 | <a name="input_tls_version"></a> [tls\_version](#input\_tls\_version) | TLS version to use for SSL-enabled IP services (api-ssl, www-ssl). | `string` | `"only-1.2"` | no |
-| <a name="input_users"></a> [users](#input\_users) | Map of users to create. Keys are usernames. If password is omitted, a random 16-character password is generated. | <pre>map(object({<br/>    group    = string<br/>    password = optional(string)<br/>    comment  = optional(string, "")<br/>    address  = optional(string, "")<br/>  }))</pre> | `{}` | no |
+| <a name="input_users"></a> [users](#input\_users) | Map of users to create. Keys are usernames. If password is omitted, a random 16-character password is generated. | <pre>map(object({<br/>    group              = string<br/>    password           = optional(string)<br/>    comment            = optional(string, "")<br/>    address            = optional(string, "")<br/>    inactivity_policy  = optional(string)<br/>    inactivity_timeout = optional(string)<br/>  }))</pre> | `{}` | no |
 | <a name="input_vlans"></a> [vlans](#input\_vlans) | Map of VLANs to configure. Each entry requires a human-readable name and a VLAN ID. | <pre>map(object({<br/>    name    = string<br/>    vlan_id = number<br/>    mtu     = optional(number, 1500)<br/>  }))</pre> | `{}` | no |
 
 ## Outputs
