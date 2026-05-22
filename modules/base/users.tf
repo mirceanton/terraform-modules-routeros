@@ -26,11 +26,13 @@ resource "random_password" "passwords" {
 resource "routeros_system_user" "users" {
   for_each = var.users
 
-  name     = each.key
-  group    = each.value.group
-  password = each.value.password != null ? each.value.password : random_password.passwords[each.key].result
-  comment  = each.value.comment
-  address  = each.value.address
+  name               = each.key
+  group              = each.value.group
+  password           = each.value.password != null ? each.value.password : random_password.passwords[each.key].result
+  comment            = each.value.comment
+  address            = each.value.address
+  inactivity_policy  = each.value.inactivity_policy
+  inactivity_timeout = each.value.inactivity_timeout
 
   depends_on = [routeros_system_user_group.groups]
 }

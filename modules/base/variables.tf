@@ -239,10 +239,12 @@ variable "groups" {
 
 variable "users" {
   type = map(object({
-    group    = string
-    password = optional(string)
-    comment  = optional(string, "")
-    address  = optional(string, "")
+    group               = string
+    password            = optional(string)
+    comment             = optional(string, "")
+    address             = optional(string, "")
+    inactivity_policy   = optional(string)
+    inactivity_timeout  = optional(string)
   }))
   default     = {}
   description = "Map of users to create. Keys are usernames. If password is omitted, a random 16-character password is generated."
