@@ -1,3 +1,40 @@
+# MikroTik Routing
+
+Terraform module for managing routing configurations on a MikroTik RouterOS device. It manages static routes, supporting standard next-hop routes, blackhole routes, and policy routing via routing tables.
+
+## Usage
+
+```hcl
+module "routing" {
+  source = "./modules/routing"
+
+  static_routes = {
+    "default-via-isp" = {
+      dst_address = "0.0.0.0/0"
+      gateway     = "192.168.1.1"
+      distance    = 1
+    }
+    "lan-via-vpn" = {
+      dst_address = "10.0.0.0/8"
+      gateway     = "wg0"
+      comment     = "Route LAN traffic through WireGuard"
+    }
+    "blackhole-rfc1918" = {
+      dst_address = "172.16.0.0/12"
+      gateway     = ""
+      blackhole   = true
+    }
+    "isp-failover" = {
+      dst_address   = "0.0.0.0/0"
+      gateway       = "192.168.2.1"
+      distance      = 10
+      check_gateway = "ping"
+      comment       = "Failover route via secondary ISP"
+    }
+  }
+}
+```
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
