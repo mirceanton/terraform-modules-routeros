@@ -6,7 +6,8 @@ Terraform module for managing routing configurations on a MikroTik RouterOS devi
 
 ```hcl
 module "routing" {
-  source = "./modules/routing"
+  source = "git::https://github.com/mirceanton/terraform-modules-routeros.git//modules/routing?ref=main"
+  # source = "oci://ghcr.io/mirceanton/terraform-modules-routeros/routing:latest"
 
   static_routes = {
     "default-via-isp" = {
