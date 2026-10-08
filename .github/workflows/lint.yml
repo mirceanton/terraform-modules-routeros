@@ -32,7 +32,7 @@ jobs:
 
       - name: Discover modules
         id: scan
-        uses: mirceanton/action-folder-matrix@767fa535bbd9dbed5964557ed106553792349b4f # v3.0.12
+        uses: mirceanton/action-folder-matrix@c539af603cb846719c9d1d903074c99a9d50ef58 # v3.0.13
         with:
           path: "./modules"
           changed-only: true
