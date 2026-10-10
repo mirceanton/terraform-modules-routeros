@@ -62,18 +62,25 @@ variable "gateway" {
 }
 
 variable "dhcp_pool" {
-  description = "List of IP ranges for the DHCP pool (e.g., ['192.168.1.100-192.168.1.200'])."
+  description = "List of IP ranges for the DHCP pool (e.g., ['192.168.1.100-192.168.1.200']). Set to [] when static_only is true."
   type        = list(string)
+  default     = []
 
   validation {
-    condition     = length(var.dhcp_pool) > 0
-    error_message = "At least one DHCP pool range must be specified."
+    condition     = var.static_only ? length(var.dhcp_pool) == 0 : length(var.dhcp_pool) > 0
+    error_message = "Set dhcp_pool to [] for static_only, or specify at least one range for dynamic DHCP."
   }
 
   validation {
     condition     = alltrue([for r in var.dhcp_pool : can(regex("^\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}-\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$", r))])
     error_message = "Each pool range must be in the format 'START_IP-END_IP' (e.g., '192.168.1.100-192.168.1.200')."
   }
+}
+
+variable "static_only" {
+  description = "Allow only clients with static DHCP leases; do not create a dynamic IP pool."
+  type        = bool
+  default     = false
 }
 
 # --- DHCP Options ---
