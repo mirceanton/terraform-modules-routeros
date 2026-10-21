@@ -4,6 +4,8 @@ Terraform module for configuring a DHCP server on a MikroTik RouterOS device.
 
 This module creates a complete DHCP server setup including the interface IP address, IP pool, DHCP network, DHCP server, static leases, and optional DNS records for static leases. It is designed for per-VLAN or per-interface DHCP deployments.
 
+Set `static_only = true` to create a DHCP server that responds only to configured static leases, without a dynamic IP pool. In this mode, omit `dhcp_pool` (or set it to `[]`). The `pool_name` output is `null`.
+
 ## Usage
 
 ```hcl
@@ -35,6 +37,24 @@ module "dhcp_trusted" {
       name            = "homeassistant"
       match_subdomain = true
     }
+  }
+}
+```
+
+## Static-only example
+
+```hcl
+module "dhcp_dmz" {
+  source = "git::https://github.com/mirceanton/terraform-modules-routeros.git//modules/dhcp-server?ref=main"
+
+  interface   = "vlan-dmz"
+  address     = "10.66.66.1/24"
+  network     = "10.66.66.0/24"
+  static_only = true
+  dns_servers = ["10.66.66.1"]
+
+  static_leases = {
+    "10.66.66.11" = { name = "node-1", mac = "AA:BB:CC:DD:EE:01" }
   }
 }
 ```
@@ -74,7 +94,7 @@ module "dhcp_trusted" {
 | <a name="input_comment"></a> [comment](#input\_comment) | Comment prefix used for all created resources. Defaults to the interface name. | `string` | `null` | no |
 | <a name="input_conflict_detection"></a> [conflict\_detection](#input\_conflict\_detection) | Whether to enable conflict detection for DHCP leases. | `bool` | `false` | no |
 | <a name="input_create_dns_records"></a> [create\_dns\_records](#input\_create\_dns\_records) | Whether to create static DNS A records for each static lease. Can be overridden per-lease via the 'create\_dns\_record' attribute. | `bool` | `true` | no |
-| <a name="input_dhcp_pool"></a> [dhcp\_pool](#input\_dhcp\_pool) | List of IP ranges for the DHCP pool (e.g., ['192.168.1.100-192.168.1.200']). | `list(string)` | n/a | yes |
+| <a name="input_dhcp_pool"></a> [dhcp\_pool](#input\_dhcp\_pool) | List of IP ranges for the DHCP pool (e.g., ['192.168.1.100-192.168.1.200']). Set to [] when static\_only is true. | `list(string)` | `[]` | no |
 | <a name="input_dns_servers"></a> [dns\_servers](#input\_dns\_servers) | List of DNS server IP addresses to provide to DHCP clients. | `list(string)` | `[]` | no |
 | <a name="input_domain"></a> [domain](#input\_domain) | Domain name to provide to DHCP clients. | `string` | `""` | no |
 | <a name="input_dynamic_lease_identifiers"></a> [dynamic\_lease\_identifiers](#input\_dynamic\_lease\_identifiers) | Specifies which fields are used to identify dynamic DHCP leases. | `string` | `"client-mac,client-id"` | no |
@@ -85,6 +105,7 @@ module "dhcp_trusted" {
 | <a name="input_pool_name"></a> [pool\_name](#input\_pool\_name) | Name for the DHCP IP pool. Defaults to '{interface}-dhcp-pool' if not specified. | `string` | `null` | no |
 | <a name="input_server_name"></a> [server\_name](#input\_server\_name) | Name for the DHCP server resource. Defaults to the interface name if not specified. | `string` | `null` | no |
 | <a name="input_static_leases"></a> [static\_leases](#input\_static\_leases) | Map of static DHCP leases keyed by IP address. Each entry requires 'mac' and 'name'. Optionally set 'create\_dns\_record' to override the global DNS record creation flag, and 'match\_subdomain' to enable wildcard DNS matching. | <pre>map(object({<br/>    mac               = string<br/>    name              = string<br/>    create_dns_record = optional(bool)<br/>    match_subdomain   = optional(bool)<br/>  }))</pre> | `{}` | no |
+| <a name="input_static_only"></a> [static\_only](#input\_static\_only) | Allow only clients with static DHCP leases; do not create a dynamic IP pool. | `bool` | `false` | no |
 
 ## Outputs
 
@@ -93,7 +114,7 @@ module "dhcp_trusted" {
 | <a name="output_dns_record_count"></a> [dns\_record\_count](#output\_dns\_record\_count) | The number of DNS records created for static leases. |
 | <a name="output_gateway"></a> [gateway](#output\_gateway) | The gateway IP address provided to DHCP clients. |
 | <a name="output_network_address"></a> [network\_address](#output\_network\_address) | The network address in CIDR notation served by this DHCP server. |
-| <a name="output_pool_name"></a> [pool\_name](#output\_pool\_name) | The name of the DHCP IP pool. |
+| <a name="output_pool_name"></a> [pool\_name](#output\_pool\_name) | The name of the DHCP IP pool, or null in static-only mode. |
 | <a name="output_server_id"></a> [server\_id](#output\_server\_id) | The ID of the DHCP server resource. |
 | <a name="output_server_name"></a> [server\_name](#output\_server\_name) | The name of the DHCP server resource. |
 | <a name="output_static_lease_count"></a> [static\_lease\_count](#output\_static\_lease\_count) | The number of static DHCP leases configured. |

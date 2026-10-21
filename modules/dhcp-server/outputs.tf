@@ -9,8 +9,8 @@ output "server_id" {
 }
 
 output "pool_name" {
-  description = "The name of the DHCP IP pool."
-  value       = routeros_ip_pool.this.name
+  description = "The name of the DHCP IP pool, or null in static-only mode."
+  value       = var.static_only ? null : routeros_ip_pool.this[0].name
 }
 
 output "network_address" {

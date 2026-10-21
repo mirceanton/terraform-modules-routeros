@@ -25,7 +25,13 @@ resource "routeros_ip_address" "this" {
 
 # --- DHCP Pool ---
 
+moved {
+  from = routeros_ip_pool.this
+  to   = routeros_ip_pool.this[0]
+}
+
 resource "routeros_ip_pool" "this" {
+  count   = var.static_only ? 0 : 1
   name    = local.pool_name
   comment = "${local.comment} DHCP Pool"
   ranges  = var.dhcp_pool
@@ -46,7 +52,7 @@ resource "routeros_ip_dhcp_server_network" "this" {
 resource "routeros_ip_dhcp_server" "this" {
   name                      = local.server_name
   comment                   = "${local.comment} DHCP Server"
-  address_pool              = routeros_ip_pool.this.name
+  address_pool              = var.static_only ? "static-only" : routeros_ip_pool.this[0].name
   interface                 = var.interface
   authoritative             = var.authoritative
   lease_time                = var.lease_time
